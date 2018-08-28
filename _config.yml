@@ -1,0 +1,5 @@
+theme: jekyll-theme-tactile
+title: "python-mt-st"
+description: "Controlling magnetic tape drives under Linux from Python"
+show_downloads: "true"
+google_analytics: "UA-99767696-2"
