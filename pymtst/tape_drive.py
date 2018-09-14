@@ -4,8 +4,7 @@ import subprocess
 from functools import wraps
 from multiprocessing import Lock
 
-logger = logging.getLogger('model.drive')
-logging.basicConfig(level=logging.DEBUG, format='%(message)s')
+logger = logging.getLogger(__name__)
 
 # This table is based on "HPE StoreEver LTO-8 Ultrium Tape Drives Technical Reference Manual Volume 2 Software
 # Integration Guide."
