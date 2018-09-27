@@ -15,9 +15,10 @@ mt-gnu. In the next version we will move to communicate with linux st driver via
 
 ## Prerequisites
 
-1. Current version is wrapping mt-gnu. Make sure mt-gnu is in your execution path.
-2. root privilege needed by magnetic tape drive operations
-3. Python 3
+1. Linux/Python 3
+2. Current version is wrapping mt-gnu. Make sure mt-gnu is in your execution path.
+3. root privilege needed by magnetic tape drive operations
+4. You will need either a real tape drive or use mhvtl as a simulate tape drive
 
 
 ## Install
