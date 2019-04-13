@@ -1,3 +1,5 @@
+[![PyPI version](https://badge.fury.io/py/python-mt-st.svg)](https://pypi.org/project/python-mt-st/)
+
 A magnetic tape drive controller ✨🍰✨
 =======================================================
 
