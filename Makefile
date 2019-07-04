@@ -9,7 +9,7 @@ pypinfo:
 	pypinfo pymtst 
 
 test:
-	nosetests tests
+	PYTHONPATH=. pytest tests
 
 clean:
 	python setup.py clean
@@ -20,6 +20,7 @@ sdist:
 
 pypi:
 	twine upload dist/*.tar.gz -r pypi --skip-existing
+
 testpypi:
 	twine upload dist/*.tar.gz -r testpypi --skip-existing
 
