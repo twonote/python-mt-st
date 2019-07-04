@@ -2,7 +2,7 @@
 import subprocess
 import time
 
-import tape_conf as conf
+from tests import tape_conf as conf
 
 
 def reset():

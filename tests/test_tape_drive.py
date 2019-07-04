@@ -3,9 +3,9 @@ import subprocess
 import time
 from unittest import TestCase
 
-import mhvtl
-import tape_conf
-from tape_drive import TapeDrive
+from tests import mhvtl
+from tests import tape_conf
+from pymtst.tape_drive import TapeDrive
 
 test_dir = "/tmp/test_drive"
 prop = tape_conf.prop
