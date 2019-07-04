@@ -134,4 +134,6 @@ class TapeDrive:
     def _parse_file_number(status):
         for line in status.splitlines():
             if 'file number' in line:
+                logger.debug('file number line: %s', line)
                 return int(line.split('=')[1].strip())
+        raise Exception('Cannot find file number in status.')
