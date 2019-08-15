@@ -3,13 +3,44 @@ import subprocess
 import time
 from unittest import TestCase
 
+from pymtst.tape_drive import TapeDrive
 from tests import mhvtl
 from tests import tape_conf
-from pymtst.tape_drive import TapeDrive
 
 test_dir = "/tmp/test_drive"
 prop = tape_conf.prop
 TIMEOUT = 60 * 3
+
+
+def prepare_tape():
+    if tape_conf.HIT_MHVTL:
+        mhvtl.reset()
+
+    subprocess.run(['mtx', "-f", prop['mediumx'], "unload", "1", "0"], timeout=TIMEOUT, check=False)
+    print('wait for unload...')
+    time.sleep(1)  # mhvtl: unload is asynchronous
+
+    subprocess.run(['mtx', "-f", prop['mediumx'], "load", "1", "0"], timeout=TIMEOUT, check=True)
+
+    if tape_conf.HIT_MHVTL:
+        # mhvtl bug mhvtl/issues/4
+        subprocess.run(['mt-gnu', "-f", prop['device'], "rewind"], timeout=TIMEOUT, check=True)
+
+    subprocess.run(['mt-gnu', "-f", prop['device'], "weof"], timeout=TIMEOUT, check=True)
+
+
+class TestTapeDriveOffline(TestCase):
+    d = None
+
+    @classmethod
+    def setUpClass(self):
+        prepare_tape()
+        self.d = TapeDrive(prop['device'])
+
+    def test_offline(self):
+        self.assertTrue(self.d.is_online())
+        self.d.offline()
+        self.assertFalse(self.d.is_online())
 
 
 class TestTapeDrive(TestCase):
@@ -17,20 +48,8 @@ class TestTapeDrive(TestCase):
 
     @classmethod
     def setUpClass(self):
-        if tape_conf.HIT_MHVTL:
-            mhvtl.reset()
-
-        subprocess.run(['mtx', "-f", prop['mediumx'], "unload", "1", "0"], timeout=TIMEOUT, check=False)
-        print('wait for unload...')
-        time.sleep(1)  # mhvtl: unload is asynchronous
-
-        subprocess.run(['mtx', "-f", prop['mediumx'], "load", "1", "0"], timeout=TIMEOUT, check=True)
-        subprocess.run(['mt-gnu', "-f", prop['device'], "weof"], timeout=TIMEOUT, check=True)
-
+        prepare_tape()
         self.d = TapeDrive(prop['device'])
-
-    # def setUp(self):
-    #     subprocess.run(['mt-gnu', "-f", prop['device'], "rewind"], timeout=TIMEOUT, check=True)
 
     def test_status(self):
         self.assertIsNotNone(self.d.status())
@@ -68,12 +87,3 @@ class TestTapeDrive(TestCase):
     def test_current_file_number(self):
         subprocess.run(['mt-gnu', "-f", prop['device'], "rewind"], timeout=TIMEOUT, check=True)
         self.assertEqual(0, self.d.current_file_number())
-
-
-def prepare_files():
-    subprocess.run(["rm", "-rf", test_dir], timeout=TIMEOUT, check=True)
-
-    subprocess.run(["mkdir", "-p", test_dir + '/to_migrated/files'], timeout=TIMEOUT, check=True)
-    for i in range(3):
-        subprocess.run(["truncate", "-s", "1M", test_dir + "/to_migrated/files/1M." + str(i)], timeout=TIMEOUT,
-                       check=True)

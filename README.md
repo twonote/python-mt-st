@@ -38,3 +38,6 @@ have by this [guide](https://www.bacula.org/7.2.x-manuals/en/problems/Testing_Yo
 1. You need either a real tape drive or [mhvtl](https://github.com/markh794/mhvtl) for simulation.
 2. After tape drive is ready, update tape drive information in ```test/tape_conf.py```
 3. run test cases by ```$ make test```
+
+## Known Issues
+1. mt-st is necessary is you want to use online/offine operations.

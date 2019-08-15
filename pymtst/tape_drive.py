@@ -17,6 +17,9 @@ timeouts = {
     'erase': 14.8 * 60 * 60,
 }
 
+# Undefined in doc. Use rewind's instead
+timeouts['offline'] = timeouts['rewind']
+timeouts['online'] = timeouts['rewind']
 
 def synchronized(tlockname):
     """A decorator to place an instance based lock around a method """
@@ -129,6 +132,36 @@ class TapeDrive:
 
     def current_file_number(self):
         return self._parse_file_number(self._status())
+
+    # online/offline operations need mt-st.
+    # TODO: move all operations to mt-st.
+    @synchronized('_lock')
+    def online(self):
+        args = ["load"]
+        subprocess.run(['mt-st', "-f", self.device] + args, timeout=timeouts.get(args[0]), check=True,
+                       stderr=subprocess.PIPE)
+
+    @synchronized('_lock')
+    def offline(self):
+        args = ["offline"]
+        subprocess.run(['mt-st', "-f", self.device] + args, timeout=timeouts.get(args[0]), check=True,
+                       stderr=subprocess.PIPE)
+
+    @synchronized('_lock')
+    def is_online(self) -> bool:
+
+        status = subprocess.run(['mt-st', "-f", self.device, "status"], timeout=timeouts.get("status"), check=True,
+                                stderr=subprocess.PIPE,
+                                stdout=subprocess.PIPE, universal_newlines=True).stdout
+
+        return self._word_exist_in_status('ONLINE', status)
+
+    @staticmethod
+    def _word_exist_in_status(word, status) -> bool:
+        for line in status.splitlines():
+            if word in line:
+                return True
+        return False
 
     @staticmethod
     def _parse_file_number(status):

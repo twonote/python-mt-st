@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 package = "python-mt-st"
-version = "0.1.4"
+version = "0.2.0-snapshot"
 url = "https://github.com/twonote/python-mt-st"
 license = "LGPLv2.1"
 short_description = "Module for controlling magnetic tape drives under Linux from Python"
