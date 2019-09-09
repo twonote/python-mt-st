@@ -40,4 +40,4 @@ have by this [guide](https://www.bacula.org/7.2.x-manuals/en/problems/Testing_Yo
 3. run test cases by ```$ make test```
 
 ## Known Issues
-1. mt-st is necessary is you want to use online/offine operations.
+1. mt-st is necessary  you want to use online/offine operations.
