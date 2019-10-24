@@ -16,7 +16,7 @@ Linux st driver directly via ioctl instead.
 ## Prerequisites
 
 1. Linux/Python 3
-2. The current version is wrapping mt-gnu. Make sure mt-gnu is in your execution path.
+2. The current version is wrapping GNU tools. Make sure mt-gnu/mt-st/sg_logs is in your execution path.
 3. Root privilege is necessary for operating a magnetic tape drive.
 4. You will need either a real tape drive or use mhvtl as a simulate tape drive.
 
@@ -38,6 +38,3 @@ have by this [guide](https://www.bacula.org/7.2.x-manuals/en/problems/Testing_Yo
 1. You need either a real tape drive or [mhvtl](https://github.com/markh794/mhvtl) for simulation.
 2. After tape drive is ready, update tape drive information in ```test/tape_conf.py```
 3. run test cases by ```$ make test```
-
-## Known Issues
-1. mt-st is necessary if you want to use online/offine operations.
