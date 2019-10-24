@@ -82,10 +82,10 @@ class TapeDrive:
 
     def _execute_mt(self, args):
         """
-        Execute mt-gnu command with the drive and args
+        Execute mt with args which hits the drive
 
          :param args: an array of mt's "operation, [count]"
-         :raise subprocess exception with stderr
+         :raise subprocess exception (stderr from mt is included)
 
         """
         # TODO: wall clock
