@@ -78,6 +78,29 @@ class TestTapeDrive(TestCase):
 
         self.assertIn("Input/output error", str(cm.exception.stderr))
 
+    def test_fsf(self):
+        subprocess.run(['mt-gnu', "-f", prop['device'], "rewind"], timeout=TIMEOUT, check=True)
+        self.d.fsf(1)
+        self.assertEqual(1, self.d.current_file_number())
+
+        subprocess.run(['mt-gnu', "-f", prop['device'], "eom"], timeout=TIMEOUT, check=True)
+
+        with self.assertRaises(subprocess.CalledProcessError) as cm:
+            self.d.fsf(1)
+
+        self.assertIn("Input/output error", str(cm.exception.stderr))
+
+    def test_bsfm(self):
+        subprocess.run(['mt-gnu', "-f", prop['device'], "asf", "1"], timeout=TIMEOUT, check=True)
+
+        self.d.bsfm(1)
+        self.assertEqual(1, self.d.current_file_number())
+
+        with self.assertRaises(subprocess.CalledProcessError) as cm:
+            self.d.bsfm(2)
+
+        self.assertIn("Input/output error", str(cm.exception.stderr))
+
     def test_erase(self):
         subprocess.run(['mt-gnu', "-f", prop['device'], "weof"], timeout=TIMEOUT, check=True)
         self.d.erase()
