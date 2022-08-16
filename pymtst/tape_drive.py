@@ -13,6 +13,8 @@ timeouts = {
     'rewind': 11 * 60,
     'eom': 49 * 60,
     'asf': 49 * 60,
+    'fsf': 49 * 60,
+    'bsfm': 49 * 60,
     'weof': 28 * 60,
     'erase': 14.8 * 60 * 60,
 }
@@ -120,6 +122,14 @@ class TapeDrive:
     @synchronized('_lock')
     def asf(self, count):
         self._execute_mt(["asf", str(count)])
+
+    @synchronized('_lock')
+    def fsf(self, count):
+        self._execute_mt(["fsf", str(count)])
+
+    @synchronized('_lock')
+    def bsfm(self, count):
+        self._execute_mt(["bsfm", str(count)])
 
     @synchronized('_lock')
     def erase(self, quickly=True):
